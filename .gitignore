@@ -1,4 +1,6 @@
 *.swp
+*.files
+tags
 
 # Prerequisites
 *.d

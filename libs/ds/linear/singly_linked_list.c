@@ -2,77 +2,128 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../../../common/ZStatus.h"
+
 typedef struct ZNode{
-  struct  ZNode* next;
-  void*          data;
+    struct  ZNode* next;
+    void*          data;
 } ZNode;
 
 typedef struct {
-  ZNode* head;
+    ZNode* head;
 } ZList;
 
-int ZAppend
+ZSTATUS
+ZAppend
 (
-  ZList*    List,
-  void*     Value
+    ZList*    List,
+    void*     Value
 )
 {
-  ZNode*	 new        =   NULL;
-  ZNode*   current    =   NULL;
-  int      retVal     =   -1;
+    ZSTATUS     status     =   ZSTATUS_FAILED;
+    ZNode*	    new        =   NULL;
+    ZNode*      current    =   NULL;
 
-  if( List->head )
-  {
-    current = List->head;
-    while( current->next )
+    if( List )
     {
-       current = (ZNode*) current->next;
-    }
-    new = malloc( sizeof(ZNode) );
+        // we have at least one item in the list
+        if( List->head )
+        {
+            current = List->head;
+            while( current->next )
+            {
+                current = (ZNode*) current->next;
+            }
+            new = malloc( sizeof(ZNode) );
 
-    if( new )
-    {
-       new->data = Value;
-       current->next = new;
-       retVal = 0;
+            if( new )
+            {
+                new->data = Value;
+                current->next = new;
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+            }
+        }
+        else
+        {
+             // the list is empty
+            new = malloc( sizeof(ZNode) );
+            if( new )
+            {
+                new->data = Value;
+                List->head = new;
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+            }
+        }
     }
-  }
-  else
-  {
-    new = malloc( sizeof(ZNode) );
-    if( new )
+    else
     {
-      new->data = Value;
-      List->head = new;
-      retVal = 0;
+        status = ZSTATUS_INVALID_ARGS;
     }
-  }
 
-  return retVal;
+    return status;
 }
 
-int ZPrepend
+ZSTATUS
+ZPrepend
 (
-  ZNode* Head,
-  void*  Value
+    ZList* List,
+    void*  Value
 )
 {
-  return -1;
+    ZSTATUS     status    =  ZSTATUS_FAILED;
+    ZNode*      new       =  NULL;
+
+    if( List )
+    {
+        if ( List->head )
+        {
+
+        }
+        else
+        {
+            // list currently empty
+            new = malloc( sizeof(ZNode) );
+            if ( new )
+            {
+                new->data = Value;
+                List->head = new;
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+            }
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
 }
-	
+
 int main(int argc, char** argv)
 {
   int     status   =  0;
   char*   hi       =  "hi";
   char*   hi2      =  "hi2";
   ZList*  list     =  NULL;
-  
+
   list = malloc( sizeof(ZList) );
-   
+
   status = ZAppend( list, (void*) hi );
   status = ZAppend( list, (void*) hi2 );
 
   printf("%s\n%s\n", (char*) list->head->data, (char*) list->head->next->data);
 
   return 0;
-}  
+}
