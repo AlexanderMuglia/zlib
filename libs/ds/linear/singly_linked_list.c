@@ -1,28 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "../../../common/ZStatus.h"
-
-typedef struct ZNode{
-    struct  ZNode* next;
-    void*          data;
-} ZNode;
-
-typedef struct {
-    ZNode* head;
-} ZList;
+#include "include/singly_linked_list.h"
 
 ZSTATUS
-ZAppend
+ZSinglyLinkedListAppend
 (
-    ZList*    List,
-    void*     Value
+    ZSinglyLinkedList*      List,
+    void*                   Value
 )
 {
-    ZSTATUS     status     =   ZSTATUS_FAILED;
-    ZNode*	    new        =   NULL;
-    ZNode*      current    =   NULL;
+    ZSTATUS                     status     =   ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*	    new        =   NULL;
+    ZSinglyLinkedListNode*      current    =   NULL;
 
     if( List )
     {
@@ -32,14 +19,15 @@ ZAppend
             current = List->head;
             while( current->next )
             {
-                current = (ZNode*) current->next;
+                current = (ZSinglyLinkedListNode*) current->next;
             }
-            new = malloc( sizeof(ZNode) );
+            new = malloc( sizeof(ZSinglyLinkedListNode) );
 
             if( new )
             {
                 new->data = Value;
                 current->next = new;
+                List->size += 1;
                 status = ZSTATUS_OK;
             }
             else
@@ -50,12 +38,13 @@ ZAppend
         else
         {
              // the list is empty
-            new = malloc( sizeof(ZNode) );
+            new = malloc( sizeof(ZSinglyLinkedListNode) );
             if( new )
             {
                 new->data = Value;
                 List->head = new;
                 status = ZSTATUS_OK;
+                List->size += 1;
             }
             else
             {
@@ -72,35 +61,34 @@ ZAppend
 }
 
 ZSTATUS
-ZPrepend
+ZSinglyLinkedListPrepend
 (
-    ZList* List,
-    void*  Value
+    ZSinglyLinkedList*      List,
+    void*                   Value
 )
 {
-    ZSTATUS     status    =  ZSTATUS_FAILED;
-    ZNode*      new       =  NULL;
+    ZSTATUS                     status    =  ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*      new       =  NULL;
 
     if( List )
     {
-        if ( List->head )
+        new = malloc( sizeof(ZSinglyLinkedListNode) );
+        if ( new )
         {
+            new->data = Value;
 
+            if ( List->head )
+            {
+                new->next = List->head;
+            }
+
+            List->head = new;
+            List->size += 1;
+            status = ZSTATUS_OK;
         }
         else
         {
-            // list currently empty
-            new = malloc( sizeof(ZNode) );
-            if ( new )
-            {
-                new->data = Value;
-                List->head = new;
-                status = ZSTATUS_OK;
-            }
-            else
-            {
-                status = ZSTATUS_OUT_OF_MEMORY;
-            }
+            status = ZSTATUS_OUT_OF_MEMORY;
         }
     }
     else
@@ -113,17 +101,29 @@ ZPrepend
 
 int main(int argc, char** argv)
 {
-  int     status   =  0;
-  char*   hi       =  "hi";
-  char*   hi2      =  "hi2";
-  ZList*  list     =  NULL;
+    ZSTATUS                     status   =  0;
+    char*                       hi       =  "hi";
+    char*                       hi2      =  "hi2";
+    char*                       hi3      =  "hi3";
+    ZSinglyLinkedList*          list     =  NULL;
+    ZSinglyLinkedListNode*      node     =  NULL;
+    int                         i        =  0;
 
-  list = malloc( sizeof(ZList) );
+    list = malloc( sizeof(ZSinglyLinkedList) );
+    node = malloc( sizeof(ZSinglyLinkedListNode) );
 
-  status = ZAppend( list, (void*) hi );
-  status = ZAppend( list, (void*) hi2 );
+    status = ZSinglyLinkedListPrepend( list, (void*) hi );
+    status = ZSinglyLinkedListAppend( list, (void*) hi2 );
+    status = ZSinglyLinkedListPrepend( list, (void*) hi3 );
 
-  printf("%s\n%s\n", (char*) list->head->data, (char*) list->head->next->data);
+    node = list->head;
+    printf( "List size = %d\n", list->size );
+    while ( node )
+    {
+        printf( "list item %d: %s\n", i, (char*) node->data );
+        node = node->next;
+        i++;
+    }
 
-  return 0;
+    return 0;
 }
