@@ -35,3 +35,9 @@ ZSinglyLinkedListPrepend
     ZSinglyLinkedList*      List,
     void*                   Value
 );
+
+ZSTATUS
+ZSinglyLinkedListPrint
+(
+    ZSinglyLinkedList*      List
+);

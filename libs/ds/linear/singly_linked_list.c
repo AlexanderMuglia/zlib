@@ -99,6 +99,33 @@ ZSinglyLinkedListPrepend
     return status;
 }
 
+ZSTATUS
+ZSinglyLinkedListPrint
+(
+    ZSinglyLinkedList*      List
+)
+{
+    ZSTATUS                      status      =  ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*       current     =  NULL;
+
+    if( List )
+    {
+        current = List->head;
+
+        while ( current )
+        {
+            // assuming string for now, but this can be better
+            printf( "%s->", (char*) current->data);
+            current = current->next;
+        }
+        printf("NULL\n");
+        status = ZSTATUS_OK;
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+}
 int main(int argc, char** argv)
 {
     ZSTATUS                     status   =  0;
@@ -124,6 +151,8 @@ int main(int argc, char** argv)
         node = node->next;
         i++;
     }
+
+    status = ZSinglyLinkedListPrint( list );
 
     return 0;
 }
