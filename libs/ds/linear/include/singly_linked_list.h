@@ -41,3 +41,10 @@ ZSinglyLinkedListPrint
 (
     ZSinglyLinkedList*      List
 );
+
+ZSTATUS
+ZSinglyLinkedListRemoveAtIndex
+(
+    ZSinglyLinkedList*      List,
+    uint32_t                index
+);

@@ -126,6 +126,73 @@ ZSinglyLinkedListPrint
         status = ZSTATUS_INVALID_ARGS;
     }
 }
+
+
+ZSTATUS
+ZSinglyLinkedListRemoveAtIndex
+(
+    ZSinglyLinkedList*      List,
+    uint32_t                index
+)
+{
+    ZSTATUS                                 status          =  ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*                  prev            =  NULL;
+    ZSinglyLinkedListNode*                  tmp             =  NULL;
+    int                                     i               =  0;
+
+    if( List )
+    {
+        if( index < List->size )
+        {
+            prev = List->head;
+
+            if( 0 == index )
+            {
+                if ( List->size > 1 )
+                {
+                    List->head = List->head->next;
+                }
+                else
+                {
+                    List->head = NULL;
+                }
+                free( prev );
+            }
+            else
+            {
+                for( i = 1; i < index; i++ );
+                {
+                    prev = prev->next;
+                }
+
+                tmp = prev->next;
+                if( prev->next->next )
+                {
+                    // not removing the last item
+                    prev->next = prev->next->next;
+                }
+                else
+                {
+                    prev->next = NULL;
+                }
+                free ( tmp );
+            }
+
+            List->size -= 1;
+            status = ZSTATUS_OK;
+        }
+        else
+        {
+            status = ZSTATUS_INDEX_OUT_OF_RANGE;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
 int main(int argc, char** argv)
 {
     ZSTATUS                     status   =  0;
@@ -139,9 +206,24 @@ int main(int argc, char** argv)
     list = malloc( sizeof(ZSinglyLinkedList) );
     node = malloc( sizeof(ZSinglyLinkedListNode) );
 
+    status = ZSinglyLinkedListAppend( list, (void*) hi2 );
+    status = ZSinglyLinkedListAppend( list, (void*) hi2 );
+    status = ZSinglyLinkedListAppend( list, (void*) hi2 );
+    status = ZSinglyLinkedListRemoveAtIndex( list, 0 );
+    printf("%x\n", status);
+    status = ZSinglyLinkedListPrepend( list, (void*) hi );
+    status = ZSinglyLinkedListRemoveAtIndex( list, 0 );
+    printf("%x\n", status);
     status = ZSinglyLinkedListPrepend( list, (void*) hi );
     status = ZSinglyLinkedListAppend( list, (void*) hi2 );
     status = ZSinglyLinkedListPrepend( list, (void*) hi3 );
+    printf("%d\n", list->size);
+    status = ZSinglyLinkedListRemoveAtIndex( list, 7 );
+    printf("%x\n", status);
+    status = ZSinglyLinkedListRemoveAtIndex( list, 1 );
+    printf("%x\n", status);
+    status = ZSinglyLinkedListRemoveAtIndex( list, 1 );
+    printf("%x\n", status);
 
     node = list->head;
     printf( "List size = %d\n", list->size );
