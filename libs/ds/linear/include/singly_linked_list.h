@@ -8,8 +8,8 @@
 
 typedef struct ZSinglyLinkedListNode
 {
-    struct          ZSinglyLinkedListNode* next;
-    void*           data;
+    struct          ZSinglyLinkedListNode*           next;
+    void*                                            data;
 
 } ZSinglyLinkedListNode;
 
