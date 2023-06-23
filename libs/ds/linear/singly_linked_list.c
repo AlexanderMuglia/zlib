@@ -4,7 +4,7 @@ ZSTATUS
 ZSinglyLinkedListAppend
 (
     ZSinglyLinkedList*      List,
-    void*                   Value
+    char*                   Value
 )
 {
     ZSTATUS                     status     =   ZSTATUS_FAILED;
@@ -64,7 +64,7 @@ ZSTATUS
 ZSinglyLinkedListPrepend
 (
     ZSinglyLinkedList*      List,
-    void*                   Value
+    char*                   Value
 )
 {
     ZSTATUS                     status    =  ZSTATUS_FAILED;
@@ -114,8 +114,7 @@ ZSinglyLinkedListPrint
 
         while ( current )
         {
-            // assuming string for now, but this can be better
-            printf( "%s->", (char*) current->data);
+            printf( "%s->", current->data);
             current = current->next;
         }
         printf("NULL\n");
@@ -132,7 +131,7 @@ ZSTATUS
 ZSinglyLinkedListRemoveAtIndex
 (
     ZSinglyLinkedList*      List,
-    uint32_t                index
+    uint32_t                Index
 )
 {
     ZSTATUS                                 status          =  ZSTATUS_FAILED;
@@ -142,11 +141,11 @@ ZSinglyLinkedListRemoveAtIndex
 
     if( List )
     {
-        if( index < List->size )
+        if( Index < List->size )
         {
             prev = List->head;
 
-            if( 0 == index )
+            if( 0 == Index )
             {
                 if ( List->size > 1 )
                 {
@@ -162,7 +161,7 @@ ZSinglyLinkedListRemoveAtIndex
             {
                 current = prev->next;
 
-                for( i = 1; i < index; i++ );
+                for( i = 1; i < Index; i++ );
                 {
                     prev = current;
                     current = current->next;
@@ -187,6 +186,61 @@ ZSinglyLinkedListRemoveAtIndex
 
     return status;
 }
+
+ZSTATUS
+ZSinglyLinkedListSearch
+(
+    ZSinglyLinkedList*      List,
+    char*                   Item,
+    int*                    Index
+)
+{
+    ZSTATUS                 status     =  ZSTATUS_FAILED;
+    int                     i          =  0;
+    int                     found      =  0;
+    ZSinglyLinkedListNode*  cur        =  NULL;
+
+    if( List )
+    {
+        if( List->head )
+        {
+            cur = List->head;
+            for( i = 0; i < List->size; i++ )
+            {
+                if( strcmp(cur->data, Item) == 0 )
+                {
+                    found = 1;
+                    break;
+                }
+                else
+                {
+                    cur = cur->next;
+                }
+            }
+            if( found )
+            {
+                *Index = i;
+            }
+            else
+            {
+                *Index = -1;
+            }
+            status = ZSTATUS_OK;
+        }
+        else
+        {
+            *Index = -1;
+            status = ZSTATUS_OK;
+        }
+    }
+    else
+    {
+        *Index = -1;
+        status = ZSTATUS_INVALID_ARGS;
+    }
+    return status;
+}
+
 int main(int argc, char** argv)
 {
     ZSTATUS                     status   =  0;
@@ -197,23 +251,28 @@ int main(int argc, char** argv)
     ZSinglyLinkedListNode*      node     =  NULL;
     int                         i        =  0;
 
+    status = ZSinglyLinkedListSearch( list, "hi2", &i);
+    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
     list = malloc( sizeof(ZSinglyLinkedList) );
     node = malloc( sizeof(ZSinglyLinkedListNode) );
 
-    status = ZSinglyLinkedListPrepend( list, (void*) hi );
-    status = ZSinglyLinkedListPrepend( list, (void*) hi2 );
-    status = ZSinglyLinkedListPrepend( list, (void*) hi3 );
-    status = ZSinglyLinkedListPrepend( list, (void*) hi3 );
-    printf("%d\n", list->size);
-    status = ZSinglyLinkedListRemoveAtIndex( list, 3 );
-    printf("%x\n", status);
-    status = ZSinglyLinkedListRemoveAtIndex( list, 1 );
-    printf("%x\n", status);
+    status = ZSinglyLinkedListSearch( list, "hi2", &i);
+    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
+    status = ZSinglyLinkedListPrepend( list, hi );
+    status = ZSinglyLinkedListSearch( list, "hi", &i);
+    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
+    status = ZSinglyLinkedListPrepend( list, hi2 );
+    status = ZSinglyLinkedListPrepend( list, hi3 );
+    status = ZSinglyLinkedListPrepend( list, hi3 );
 
+    status = ZSinglyLinkedListSearch( list, "hi2", &i);
+    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
+    status = ZSinglyLinkedListSearch( list, "bye", &i);
+    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
     node = list->head;
     printf( "List size = %d\n", list->size );
 
-    //status = ZSinglyLinkedListPrint( list );
+    status = ZSinglyLinkedListPrint( list );
 
     return 0;
 }
