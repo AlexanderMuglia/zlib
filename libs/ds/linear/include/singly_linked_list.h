@@ -35,7 +35,8 @@ ZSinglyLinkedListAppend
     char*                   Value
 );
 
-/* Appends a new node to the start of the list
+/*
+ * Appends a new node to the start of the list
  */
 ZSTATUS
 ZSinglyLinkedListPrepend
