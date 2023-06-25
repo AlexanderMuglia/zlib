@@ -17,11 +17,11 @@ ZBubbleSort
         {
             for( j = 0; j < ArrayLen - i - 1; j++ )
             {
-                if( Array[i] > Array[i + 1] )
+                if( Array[j] > Array[j + 1] )
                 {
-                    Array[i] = Array[i] ^ Array[i + 1];
-                    Array[i + 1 ] = Array[i] ^ Array[i + 1];
-                    Array[i] = Array[i] ^ Array[i + 1];
+                    Array[j] = Array[j] ^ Array[j + 1];
+                    Array[j + 1 ] = Array[j] ^ Array[j + 1];
+                    Array[j] = Array[j] ^ Array[j + 1];
                 }
             }
         }
@@ -34,26 +34,29 @@ ZBubbleSort
     return status;
 }
 
+#define ARRAY_SIZE    10
 int main ()
 {
     ZSTATUS     status      =  ZSTATUS_OK;
-    int         array[4];
+    int         array[ARRAY_SIZE];
 
-    array[0] = 3;
-    array[1] = -4;
-    array[2] = 0;
-    array[3] = 1;
+    srand(5);
+    for( int i = 0; i < ARRAY_SIZE; i++ )
+    {
+        array[i] = rand() % 1000;
+        if (i % 2) array[i] *= -1;
+    }
 
     printf("Before sort: \n");
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < ARRAY_SIZE; i++ )
     {
         printf("%d\n", array[i]);
     }
 
-    status = ZBubbleSort( array, 4 );
+    status = ZBubbleSort( array, ARRAY_SIZE );
 
     printf("After sort: \n");
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < ARRAY_SIZE; i++ )
     {
         printf("%d\n", array[i]);
     }

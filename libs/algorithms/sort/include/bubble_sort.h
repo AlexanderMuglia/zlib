@@ -4,4 +4,9 @@
 
 #include "../../../../common/ZStatus.h"
 
-
+ZSTATUS
+ZBubbleSort
+(
+    int*    Array,
+    int     ArrayLen
+);
