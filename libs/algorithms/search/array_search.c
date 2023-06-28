@@ -1,7 +1,7 @@
 #include "include/array_search.h"
 
 ZSTATUS
-ZArrayLinearSearch
+ZLinearSearch
 (
     char**      Array,
     int         ArrayLen,
@@ -20,10 +20,12 @@ ZArrayLinearSearch
             {
                 if( strcmp(Array[i], Item) == 0 ) break;
             }
-            else
+            else if( !Array[i] && !Item )
             {
-                if( !Array[i] && !Item ) break;
+                break;
             }
+
+
             i++;
         }
 
@@ -46,20 +48,75 @@ ZArrayLinearSearch
     return status;
 }
 
+ZSTATUS
+ZBinarySearch
+(
+    int*        Array,
+    int         ArrayLen,
+    int         Item,
+    int*        Index
+)
+{
+    ZSTATUS         status      =  ZSTATUS_FAILED;
+    int             high        =  ArrayLen - 1;
+    int             low         =  0;
+    int             mid         =  ArrayLen/2;
+    bool            found       =  0;
 
-#define ARRAY_SIZE    4
+    if( Array )
+    {
+        while( high >= low )
+        {
+            mid = (high + low)/2;
+
+            if( Array[mid] == Item )
+            {
+                found = 1;
+                break;
+            }
+            else if( Array[mid] > Item )
+            {
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+
+        if( found )
+        {
+            *Index = mid;
+        }
+        else
+        {
+            *Index = -1;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+        *Index = -1;
+    }
+
+    return status;
+}
+
+#define ARRAY_SIZE    163784
 int main ()
 {
     ZSTATUS     status      =  ZSTATUS_OK;
     char*       array[ARRAY_SIZE];
     int         result      =  -1;
 
-    array[0] = "hello";
-    array[1] = "hi";
-    array[3] = "bye";
+    int         numArray[ARRAY_SIZE];
 
-    status = ZArrayLinearSearch( array, ARRAY_SIZE, "bye", &result);
+    for( int j = 0; j < ARRAY_SIZE; j++ )
+    {
+        numArray[j] = 2*j;
+    }
 
-    printf("'bye' is at %d in the array 0x%x\n", result, status);
+    ZBinarySearch( numArray, ARRAY_SIZE, 10738, &result);
+    printf("BinarySearch on 10738 gave index %d, status 0x%x\n", result, status);
     return 0;
 }
