@@ -1,4 +1,5 @@
 #include "include/array_search.h"
+#include "../sort/include/array_sort.h"
 
 ZSTATUS
 ZLinearSearch
@@ -92,6 +93,8 @@ ZBinarySearch
         {
             *Index = -1;
         }
+
+        status = ZSTATUS_OK;
     }
     else
     {
@@ -102,21 +105,23 @@ ZBinarySearch
     return status;
 }
 
-#define ARRAY_SIZE    163784
+#define ARRAY_SIZE   100
 int main ()
 {
     ZSTATUS     status      =  ZSTATUS_OK;
     char*       array[ARRAY_SIZE];
     int         result      =  -1;
-
+    int         item        =  0;
     int         numArray[ARRAY_SIZE];
 
     for( int j = 0; j < ARRAY_SIZE; j++ )
     {
-        numArray[j] = 2*j;
+        numArray[j] = rand();
     }
 
-    ZBinarySearch( numArray, ARRAY_SIZE, 10738, &result);
-    printf("BinarySearch on 10738 gave index %d, status 0x%x\n", result, status);
+    item = numArray[0];
+    status = ZBubbleSort( numArray, ARRAY_SIZE );
+    status = ZBinarySearch( numArray, ARRAY_SIZE, item, &result);
+    printf("BinarySearch on %d gave index %d, status 0x%x\n", item, result, status);
     return 0;
 }
