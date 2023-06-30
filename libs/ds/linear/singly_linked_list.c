@@ -241,38 +241,3 @@ ZSinglyLinkedListSearch
     return status;
 }
 
-int main(int argc, char** argv)
-{
-    ZSTATUS                     status   =  0;
-    char*                       hi       =  "hi";
-    char*                       hi2      =  "hi2";
-    char*                       hi3      =  "hi3";
-    ZSinglyLinkedList*          list     =  NULL;
-    ZSinglyLinkedListNode*      node     =  NULL;
-    int                         i        =  0;
-
-    status = ZSinglyLinkedListSearch( list, "hi2", &i);
-    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
-    list = malloc( sizeof(ZSinglyLinkedList) );
-    node = malloc( sizeof(ZSinglyLinkedListNode) );
-
-    status = ZSinglyLinkedListSearch( list, "hi2", &i);
-    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
-    status = ZSinglyLinkedListPrepend( list, hi );
-    status = ZSinglyLinkedListSearch( list, "hi", &i);
-    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
-    status = ZSinglyLinkedListPrepend( list, hi2 );
-    status = ZSinglyLinkedListPrepend( list, hi3 );
-    status = ZSinglyLinkedListPrepend( list, hi3 );
-
-    status = ZSinglyLinkedListSearch( list, "hi2", &i);
-    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
-    status = ZSinglyLinkedListSearch( list, "bye", &i);
-    printf("got status %d, and we (maybe) found the string at index %d\n", status, i);
-    node = list->head;
-    printf( "List size = %d\n", list->size );
-
-    status = ZSinglyLinkedListPrint( list );
-
-    return 0;
-}
