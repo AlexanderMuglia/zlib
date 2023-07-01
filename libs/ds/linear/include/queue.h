@@ -24,8 +24,22 @@ ZQueueInitialize
 );
 
 ZSTATUS
+ZQueueIsEmpty
+(
+    ZQueue*     Queue,
+    int*        IsEmpty
+);
+
+ZSTATUS
 ZEnqueue
 (
     ZQueue*      Queue,
     char*        data
+);
+
+ZSTATUS
+ZQueuePeak
+(
+    ZQueue*     Queue,
+    char**      result
 );
