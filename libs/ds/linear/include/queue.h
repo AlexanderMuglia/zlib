@@ -43,3 +43,10 @@ ZQueuePeak
     ZQueue*     Queue,
     char**      result
 );
+
+ZSTATUS
+ZDequeue
+(
+    ZQueue*     Queue,
+    char**      Result
+);
