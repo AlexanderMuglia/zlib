@@ -17,12 +17,28 @@ typedef struct
 
 } ZQueue;
 
+/*
+ * Initializes a ZQueue
+ */
 ZSTATUS
 ZQueueInitialize
 (
     ZQueue**     Queue
 );
 
+/*
+ * Returns the size of the queue Size.
+ */
+ZSTATUS
+ZQueueGetSize
+(
+    ZQueue*     Queue,
+    int*        Size
+);
+
+/*
+ * Checks if the queue is empty
+ */
 ZSTATUS
 ZQueueIsEmpty
 (
@@ -30,20 +46,32 @@ ZQueueIsEmpty
     int*        IsEmpty
 );
 
+/*
+ * Uses ZSinglyLinkedListAppend to add an item to queue.
+ */
 ZSTATUS
 ZEnqueue
 (
     ZQueue*      Queue,
-    char*        data
+    char*        Data
 );
 
+/*
+ * Returns a reference to the actual string that is next in queue
+ * Does not edit the queue.
+ */
 ZSTATUS
 ZQueuePeak
 (
     ZQueue*     Queue,
-    char**      result
+    char**      Result
 );
 
+/*
+ * Returns a copy of the string that was next in queue.
+ * Removes the item from the queue.
+ * Result string must be freed manually as it is a duplicate.
+ */
 ZSTATUS
 ZDequeue
 (

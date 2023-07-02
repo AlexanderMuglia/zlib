@@ -1,31 +1,30 @@
-#include "include/queue.h"
+#include "include/stack.h"
 
 ZSTATUS
-ZQueueInitialize
+ZStackInitialize
 (
-    ZQueue**     Queue
+    ZStack**     Stack
 )
 {
-    ZSTATUS     status      =   ZSTATUS_FAILED;
+    ZSTATUS         status      =   ZSTATUS_FAILED;
 
-    if( *Queue )
+    if( *Stack )
     {
         status = ZSTATUS_ALREADY_INITIALIZED;
     }
     else
     {
-        *Queue = malloc( sizeof(ZQueue) );
-        if( *Queue )
+        *Stack = malloc( sizeof(ZStack) );
+        if( *Stack )
         {
-            (*Queue)->queue = malloc( sizeof(ZSinglyLinkedList) );
-            if( (*Queue)->queue )
+            (*Stack)->stack = malloc( sizeof(ZSinglyLinkedList) );
+            if( (*Stack)->stack )
             {
                 status = ZSTATUS_OK;
             }
             else
             {
                 status = ZSTATUS_OUT_OF_MEMORY;
-                free( *Queue );
             }
         }
         else
@@ -38,17 +37,17 @@ ZQueueInitialize
 }
 
 ZSTATUS
-ZQueueGetSize
+ZStackGetSize
 (
-    ZQueue*     Queue,
+    ZStack*     Stack,
     int*        Size
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
 
-    if( Queue )
+    if( Stack )
     {
-        *Size = Queue->queue->size;
+        *Size = Stack->stack->size;
         status = ZSTATUS_OK;
     }
     else
@@ -60,17 +59,17 @@ ZQueueGetSize
 }
 
 ZSTATUS
-ZQueueIsEmpty
+ZStackIsEmpty
 (
-    ZQueue*     Queue,
+    ZStack*     Stack,
     int*        IsEmpty
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
 
-    if( Queue )
+    if( Stack )
     {
-        *IsEmpty = (Queue->queue->size == 0);
+        *IsEmpty = ( Stack->stack->size == 0 );
         status = ZSTATUS_OK;
     }
     else
@@ -81,19 +80,18 @@ ZQueueIsEmpty
     return status;
 }
 
-
 ZSTATUS
-ZEnqueue
+ZStackPush
 (
-    ZQueue*      Queue,
+    ZStack*      Stack,
     char*        Data
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
 
-    if( Queue )
+    if( Stack && Data )
     {
-        status = ZSinglyLinkedListAppend( Queue->queue, Data );
+        status = ZSinglyLinkedListPrepend( Stack->stack, Data );
     }
     else
     {
@@ -104,18 +102,18 @@ ZEnqueue
 }
 
 ZSTATUS
-ZQueuePeak
+ZStackPeak
 (
-    ZQueue*     Queue,
+    ZStack*     Stack,
     char**      Result
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
     int             isEmpty     =   -1;
 
-    if( Queue )
+    if( Stack )
     {
-        status = ZQueueIsEmpty( Queue, &isEmpty );
+        status = ZStackIsEmpty( Stack, &isEmpty );
         if( ZSTATUS_OK == status )
         {
             if( isEmpty )
@@ -124,7 +122,7 @@ ZQueuePeak
             }
             else
             {
-                *Result = Queue->queue->head->data;
+                *Result = Stack->stack->head->data;
             }
             // redundant but to be clear
             status = ZSTATUS_OK;
@@ -139,36 +137,37 @@ ZQueuePeak
 
 }
 
+
 ZSTATUS
-ZDequeue
+ZStackPop
 (
-    ZQueue*     Queue,
+    ZStack*     Stack,
     char**      Result
 )
 {
     ZSTATUS                     status      =   ZSTATUS_FAILED;
     ZSinglyLinkedListNode*      tmpResult   =   NULL;
 
-    if( Queue && Queue->queue )
+    if( Stack && Stack->stack )
     {
-        if( Queue->queue->size > 0 )
+        if( Stack->stack->size > 0 )
         {
-            tmpResult = Queue->queue->head;
+            tmpResult = Stack->stack->head;
 
             *Result = malloc( strlen(tmpResult->data) );
             if( Result )
             {
                 strcpy( *Result, tmpResult->data );
-                if ( Queue->queue->size > 1 )
+                if ( Stack->stack->size > 1 )
                 {
-                    Queue->queue->head = Queue->queue->head->next;
+                    Stack->stack->head = Stack->stack->head->next;
                 }
                 else
                 {
-                    Queue->queue->head = NULL;
+                    Stack->stack->head = NULL;
                 }
                 free( tmpResult );
-                Queue->queue->size -= 1;
+                Stack->stack->size -= 1;
                 status = ZSTATUS_OK;
             }
             else
@@ -192,30 +191,30 @@ ZDequeue
 int main(int argc, char** argv)
 {
     ZSTATUS                     status  =   0;
-    ZQueue*                     queue   =   NULL;
+    ZStack*                     stack   =   NULL;
     char*                       result  =   NULL;
 
-    status = ZQueueInitialize( &queue );
+    status = ZStackInitialize( &stack );
     if( ZSTATUS_OK == status )
     {
-        status = ZEnqueue( queue, "bye" );
-        status = ZEnqueue( queue, "bye1" );
-        status = ZEnqueue( queue, "bye2" );
-        status = ZEnqueue( queue, "bye3" );
-        status = ZEnqueue( queue, "bye4" );
+        status = ZStackPush( stack, "bye" );
+        status = ZStackPush( stack, "bye1" );
+        status = ZStackPush( stack, "bye2" );
+        status = ZStackPush( stack, "bye3" );
+        status = ZStackPush( stack, "bye4" );
     }
 
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
+    status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
 
     return 0;
