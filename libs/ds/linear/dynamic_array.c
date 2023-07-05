@@ -77,6 +77,46 @@ ZDynamicArrayPush
     return status;
 }
 
+ZSTATUS
+ZDynamicArrayPop
+(
+    ZDynamicArray*      Array,
+    char**              Output
+)
+{
+    ZSTATUS         status      =   ZSTATUS_OK;
+    size_t          strSize        =   0;
+
+    if( Array && (Output == NULL ))
+    {
+        if( Array->used > 0 )
+        {
+            strSize = strlen( Array->array[Array->used - 1 ] );
+            Output = malloc( strSize );
+            if( Output )
+            {
+                strcpy( *Output, Array->array[Array->used - 1] );
+                Array->array[Array->used - 1] = NULL;
+                Array->used -= 1;
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+            }
+        }
+        else
+        {
+            status = ZSTATUS_INDEX_OUT_OF_RANGE;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
 
 int main(int argc, char** argv)
 {
@@ -84,7 +124,7 @@ int main(int argc, char** argv)
     ZDynamicArray*              array   =   NULL;
     char                        example[100];
 
-    status = ZDynamicArrayInitialize( &array, 1);
+    status = ZDynamicArrayInitialize( &array, 0);
     for( int i = 0; i < 10; i++ )
     {
         strcat( example, "hi" );
