@@ -12,8 +12,15 @@ typedef struct {
 } ZDynamicArray;
 
 ZSTATUS
-ZInitializeDynamicArray
+ZDynamicArrayInitialize
 (
     ZDynamicArray**      Array,
     size_t               InitSize
+);
+
+ZSTATUS
+ZDynamicArrayPush
+(
+    ZDynamicArray*      Array,
+    char*               Input
 );
