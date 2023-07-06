@@ -87,14 +87,15 @@ ZDynamicArrayPop
     ZSTATUS         status      =   ZSTATUS_OK;
     size_t          strSize        =   0;
 
-    if( Array && (Output == NULL ))
+    if( Array && Output )
     {
         if( Array->used > 0 )
         {
             strSize = strlen( Array->array[Array->used - 1 ] );
-            Output = malloc( strSize );
+            *Output = malloc( strSize );
             if( Output )
             {
+                printf("%ld\t%s\n", Array->used, Array->array[Array->used - 1]);
                 strcpy( *Output, Array->array[Array->used - 1] );
                 Array->array[Array->used - 1] = NULL;
                 Array->used -= 1;
@@ -123,6 +124,7 @@ int main(int argc, char** argv)
     ZSTATUS                     status  =   0;
     ZDynamicArray*              array   =   NULL;
     char                        example[100];
+    char*                       res     =   "";
 
     status = ZDynamicArrayInitialize( &array, 0);
     for( int i = 0; i < 10; i++ )
@@ -130,6 +132,12 @@ int main(int argc, char** argv)
         strcat( example, "hi" );
         status = ZDynamicArrayPush( array, example );
         printf("%s\t%ld\t%d\n", array->array[i], array->size, status );
+    }
+    for( int i = 0; i < 11; i++ )
+    {
+        res = "";
+        status = ZDynamicArrayPop( array, &res );
+        printf("%s\t%ld\t%ld\t%d\n", res, array->size, array->used, status );
     }
     return 0;
 }
