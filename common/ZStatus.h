@@ -8,4 +8,4 @@ typedef     uint32_t          ZSTATUS;
 #define             ZSTATUS_OUT_OF_MEMORY             (ZSTATUS)  0x00000003
 #define             ZSTATUS_ERR_INTERNAL              (ZSTATUS)  0x00000004
 #define             ZSTATUS_INDEX_OUT_OF_RANGE        (ZSTATUS)  0x00000005
-
+#define             ZSTATUS_ALREADY_INITIALIZED       (ZSTATUS)  0x00000006
