@@ -84,8 +84,8 @@ ZDynamicArrayPop
     char**              Output
 )
 {
-    ZSTATUS         status      =   ZSTATUS_OK;
-    size_t          strSize        =   0;
+    ZSTATUS         status           =   ZSTATUS_FAILED;
+    size_t          strSize          =   0;
 
     if( Array && Output )
     {
@@ -118,6 +118,36 @@ ZDynamicArrayPop
     return status;
 }
 
+ZSTATUS
+ZDynamicArrayInsert
+(
+    ZDynamicArray*      Array,
+    char*               Input,
+    int                 Index
+)
+{
+    ZSTATUS         status      =   ZSTATUS_FAILED;
+
+    if( Array )
+    {
+        if( Array->used > Index )
+        {
+            Array->array[Index] = Input;
+            status = ZSTATUS_OK;
+        }
+        else
+        {
+            status = ZSTATUS_INDEX_OUT_OF_RANGE;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
+
 int main(int argc, char** argv)
 {
     ZSTATUS                     status  =   0;
@@ -131,6 +161,7 @@ int main(int argc, char** argv)
     printf("%s\t%ld\t%d\n", array->array[0], array->size, status );
     status = ZDynamicArrayPush( array, str2 );
     printf("%s\t%ld\t%d\n", array->array[1], array->size, status );
+    status = ZDynamicArrayInsert( array, "my new string!", 0 );
     for( int i = 0; i < 5; i++ )
     {
         res = "";

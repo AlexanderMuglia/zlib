@@ -76,3 +76,11 @@ ZSinglyLinkedListSearch
     char*                   Item,
     int*                    Index
 );
+
+ZSTATUS
+ZDynamicArrayInsert
+(
+    ZDynamicArray*      Array,
+    char*               Input,
+    int                 Index
+);
