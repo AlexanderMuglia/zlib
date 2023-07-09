@@ -42,3 +42,11 @@ ZDynamicArrayPop
     ZDynamicArray*      Array,
     char**              Output
 );
+
+ZSTATUS
+ZDynamicArrayInsert
+(
+    ZDynamicArray*      Array,
+    char*               Input,
+    int                 Index
+);
