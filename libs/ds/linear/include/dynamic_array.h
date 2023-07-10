@@ -43,6 +43,9 @@ ZDynamicArrayPop
     char**              Output
 );
 
+/*
+ * Overwrites an item in the array. Does not allow writing outside of range pushed to.
+ */
 ZSTATUS
 ZDynamicArrayInsert
 (
