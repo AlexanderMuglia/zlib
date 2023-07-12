@@ -148,6 +148,28 @@ ZDynamicArrayInsert
     return status;
 }
 
+ZSTATUS
+ZDynamicArrayDestroy
+(
+    ZDynamicArray*      Array
+)
+{
+    ZSTATUS         status      =   ZSTATUS_FAILED;
+    int             i           =   0;
+
+    for( i = 0; i < Array->size; i++ )
+    {
+        Array->array[i] = NULL;
+    }
+    Array->size = 0;
+    Array->used = 0;
+    free(Array->array);
+    free(Array);
+    status = ZSTATUS_OK;
+
+    return status;
+}
+
 int main(int argc, char** argv)
 {
     ZSTATUS                     status  =   0;
@@ -168,5 +190,6 @@ int main(int argc, char** argv)
         status = ZDynamicArrayPop( array, &res );
         printf("%s\t%ld\t%ld\t%d\n", res, array->size, array->used, status );
     }
+    status = ZDynamicArrayDestroy( array );
     return 0;
 }

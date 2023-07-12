@@ -53,3 +53,12 @@ ZDynamicArrayInsert
     char*               Input,
     int                 Index
 );
+
+/*
+ * Destroys the array
+ */
+ZSTATUS
+ZDynamicArrayDestroy
+(
+    ZDynamicArray*      Array
+);
