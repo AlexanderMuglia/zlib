@@ -78,9 +78,7 @@ ZSinglyLinkedListSearch
 );
 
 ZSTATUS
-ZDynamicArrayInsert
+ZSinglyLinkedListDestroy
 (
-    ZDynamicArray*      Array,
-    char*               Input,
-    int                 Index
+    ZSinglyLinkedList*      List
 );

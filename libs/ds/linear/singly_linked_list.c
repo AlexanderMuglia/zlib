@@ -188,6 +188,35 @@ ZSinglyLinkedListRemoveAtIndex
 }
 
 ZSTATUS
+ZSinglyLinkedListDestroy
+(
+    ZSinglyLinkedList*      List
+)
+{
+    ZSTATUS                 status      =   ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*  tmp         =   NULL;
+
+    if( List )
+    {
+        if( List->head )
+        {
+            while( List->head != NULL )
+            {
+                tmp = List->head;
+                List->head = List->head->next;
+                tmp->data = NULL;
+                free(tmp);
+            }
+        }
+        List->size = 0;
+        free(List);
+        status = ZSTATUS_OK;
+    }
+
+    return status;
+}
+
+ZSTATUS
 ZSinglyLinkedListSearch
 (
     ZSinglyLinkedList*      List,
@@ -240,4 +269,3 @@ ZSinglyLinkedListSearch
     }
     return status;
 }
-
