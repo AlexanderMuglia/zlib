@@ -188,29 +188,71 @@ ZSinglyLinkedListRemoveAtIndex
 }
 
 ZSTATUS
+ZSinglyLinkedListInitialize
+(
+    ZSinglyLinkedList**      List
+)
+{
+    ZSTATUS                 status      =   ZSTATUS_FAILED;
+
+    if( *List )
+    {
+        status = ZSTATUS_ALREADY_INITIALIZED;
+    }
+    else
+    {
+        *List = malloc( sizeof(ZSinglyLinkedList) );
+        if( *List )
+        {
+            (*List)->head = malloc( sizeof(ZSinglyLinkedListNode) );
+            if( (*List)->head )
+            {
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+                free( *List );
+            }
+        }
+        else
+        {
+            status = ZSTATUS_OUT_OF_MEMORY;
+        }
+    }
+
+    return status;
+}
+
+ZSTATUS
 ZSinglyLinkedListDestroy
 (
-    ZSinglyLinkedList*      List
+    ZSinglyLinkedList**      List
 )
 {
     ZSTATUS                 status      =   ZSTATUS_FAILED;
     ZSinglyLinkedListNode*  tmp         =   NULL;
 
-    if( List )
+    if( *List )
     {
-        if( List->head )
+        if( (*List)->head )
         {
-            while( List->head != NULL )
+            while( (*List)->head != NULL )
             {
-                tmp = List->head;
-                List->head = List->head->next;
+                tmp = (*List)->head;
+                (*List)->head = (*List)->head->next;
                 tmp->data = NULL;
                 free(tmp);
             }
         }
-        List->size = 0;
-        free(List);
+        (*List)->size = 0;
+        free(*List);
+        *List = NULL;
         status = ZSTATUS_OK;
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
     }
 
     return status;
@@ -268,4 +310,21 @@ ZSinglyLinkedListSearch
         status = ZSTATUS_INVALID_ARGS;
     }
     return status;
+}
+
+int main (){
+
+    ZSTATUS                 status  =   ZSTATUS_OK;
+    ZSinglyLinkedList*      list    =   NULL;
+
+    status = ZSinglyLinkedListInitialize( &list );
+    printf("%d\n", status);
+    status = ZSinglyLinkedListAppend( list, "hi" );
+    printf("%d\n", status);
+    status = ZSinglyLinkedListDestroy( &list );
+    printf("%d\n", status);
+    status = ZSinglyLinkedListDestroy( &list );
+    printf("%d\n", status);
+
+    return 0;
 }
