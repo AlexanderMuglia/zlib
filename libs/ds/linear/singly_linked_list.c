@@ -311,20 +311,3 @@ ZSinglyLinkedListSearch
     }
     return status;
 }
-
-int main (){
-
-    ZSTATUS                 status  =   ZSTATUS_OK;
-    ZSinglyLinkedList*      list    =   NULL;
-
-    status = ZSinglyLinkedListInitialize( &list );
-    printf("%d\n", status);
-    status = ZSinglyLinkedListAppend( list, "hi" );
-    printf("%d\n", status);
-    status = ZSinglyLinkedListDestroy( &list );
-    printf("%d\n", status);
-    status = ZSinglyLinkedListDestroy( &list );
-    printf("%d\n", status);
-
-    return 0;
-}
