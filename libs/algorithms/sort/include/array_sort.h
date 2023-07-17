@@ -10,3 +10,10 @@ ZBubbleSort
     int*    Array,
     int     ArrayLen
 );
+
+ZSTATUS
+ZQuickSort
+(
+    int*    Array,
+    int     ArrayLen
+);
