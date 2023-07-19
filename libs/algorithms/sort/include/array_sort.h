@@ -4,6 +4,10 @@
 
 #include "../../../../common/ZStatus.h"
 
+/*
+ * does a bubble sort of an array of integers.
+ * O(n^2) time
+ */
 ZSTATUS
 ZBubbleSort
 (
@@ -11,6 +15,10 @@ ZBubbleSort
     int     ArrayLen
 );
 
+/*
+ * Performs Quicksort on an array of integers.
+ * O(nlogn) time, operates in place
+ */
 ZSTATUS
 ZQuickSort
 (
