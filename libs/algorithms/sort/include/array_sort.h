@@ -5,8 +5,8 @@
 #include "../../../../common/ZStatus.h"
 
 /*
- * does a bubble sort of an array of integers.
- * O(n^2) time
+ * Does a bubble sort of an array of integers.
+ * O(n^2) time.
  */
 ZSTATUS
 ZBubbleSort
@@ -17,7 +17,7 @@ ZBubbleSort
 
 /*
  * Performs Quicksort on an array of integers.
- * O(nlogn) time, operates in place
+ * O(nlogn) time, operates in place.
  */
 ZSTATUS
 ZQuickSort
