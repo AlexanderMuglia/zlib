@@ -188,6 +188,77 @@ ZSinglyLinkedListRemoveAtIndex
 }
 
 ZSTATUS
+ZSinglyLinkedListInitialize
+(
+    ZSinglyLinkedList**      List
+)
+{
+    ZSTATUS                 status      =   ZSTATUS_FAILED;
+
+    if( *List )
+    {
+        status = ZSTATUS_ALREADY_INITIALIZED;
+    }
+    else
+    {
+        *List = malloc( sizeof(ZSinglyLinkedList) );
+        if( *List )
+        {
+            (*List)->head = malloc( sizeof(ZSinglyLinkedListNode) );
+            if( (*List)->head )
+            {
+                status = ZSTATUS_OK;
+            }
+            else
+            {
+                status = ZSTATUS_OUT_OF_MEMORY;
+                free( *List );
+            }
+        }
+        else
+        {
+            status = ZSTATUS_OUT_OF_MEMORY;
+        }
+    }
+
+    return status;
+}
+
+ZSTATUS
+ZSinglyLinkedListDestroy
+(
+    ZSinglyLinkedList**      List
+)
+{
+    ZSTATUS                 status      =   ZSTATUS_FAILED;
+    ZSinglyLinkedListNode*  tmp         =   NULL;
+
+    if( *List )
+    {
+        if( (*List)->head )
+        {
+            while( (*List)->head != NULL )
+            {
+                tmp = (*List)->head;
+                (*List)->head = (*List)->head->next;
+                tmp->data = NULL;
+                free(tmp);
+            }
+        }
+        (*List)->size = 0;
+        free(*List);
+        *List = NULL;
+        status = ZSTATUS_OK;
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
+
+ZSTATUS
 ZSinglyLinkedListSearch
 (
     ZSinglyLinkedList*      List,
@@ -240,4 +311,3 @@ ZSinglyLinkedListSearch
     }
     return status;
 }
-

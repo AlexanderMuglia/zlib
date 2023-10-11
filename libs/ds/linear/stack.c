@@ -37,6 +37,31 @@ ZStackInitialize
 }
 
 ZSTATUS
+ZStackDestroy
+(
+    ZStack**     Stack
+)
+{
+    ZSTATUS     status      =   ZSTATUS_FAILED;
+
+    if( *Stack )
+    {
+        status = ZSinglyLinkedListDestroy( &((*Stack)->stack) );
+        if( ZSTATUS_OK == status )
+        {
+            free(*Stack);
+            *Stack = NULL;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
+
+ZSTATUS
 ZStackGetSize
 (
     ZStack*     Stack,
@@ -217,5 +242,9 @@ int main(int argc, char** argv)
     status = ZStackPop( stack, &result );
     printf("got status %d, %s\n", status, result );
 
+    status = ZStackDestroy( &stack );
+    printf("got status %d\n", status );
+    status = ZStackDestroy( &stack );
+    printf("got status %d\n", status );
     return 0;
 }

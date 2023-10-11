@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <time.h>
 #include "include/array_search.h"
 #include "../sort/include/array_sort.h"
 #include <math.h>
@@ -147,7 +149,7 @@ ZTwoCrystalBalls
     return status;
 }
 
-#define ARRAY_SIZE   28
+#define ARRAY_SIZE   1000
 int main ()
 {
     ZSTATUS     status      =  ZSTATUS_OK;
@@ -156,16 +158,22 @@ int main ()
     int         item        =  0;
     int         numArray[ARRAY_SIZE];
 
+    srand(time(0));
     for( int j = 0; j < ARRAY_SIZE; j++ )
     {
-        numArray[j] = j % 2;
+        numArray[j] = rand() % 100;
+        printf("%d\t", numArray[j]);
     }
+    printf("\n");
 
     item = numArray[0];
-    status = ZBubbleSort( numArray, ARRAY_SIZE );
+    status = ZQuickSort( numArray, ARRAY_SIZE );
+    for( int j = 0; j < ARRAY_SIZE; j++ )
+    {
+        printf("%d\t", numArray[j]);
+    }
+    printf("\n");
     status = ZBinarySearch( numArray, ARRAY_SIZE, item, &result);
     printf("BinarySearch on %d gave index %d, status 0x%x\n", item, result, status);
-    status = ZTwoCrystalBalls( numArray, ARRAY_SIZE, &result);
-    printf("2CB on the array gave index %d, status 0x%x\n", result, status);
     return 0;
 }

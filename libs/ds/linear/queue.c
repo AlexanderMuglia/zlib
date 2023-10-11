@@ -38,6 +38,31 @@ ZQueueInitialize
 }
 
 ZSTATUS
+ZQueueDestroy
+(
+    ZQueue**     Queue
+)
+{
+    ZSTATUS     status      =   ZSTATUS_FAILED;
+
+    if( *Queue )
+    {
+        status = ZSinglyLinkedListDestroy( &((*Queue)->queue) );
+        if( ZSTATUS_OK == status )
+        {
+            free(*Queue);
+            *Queue = NULL;
+        }
+    }
+    else
+    {
+        status = ZSTATUS_INVALID_ARGS;
+    }
+
+    return status;
+}
+
+ZSTATUS
 ZQueueGetSize
 (
     ZQueue*     Queue,
@@ -218,5 +243,9 @@ int main(int argc, char** argv)
     status = ZDequeue( queue, &result );
     printf("got status %d, %s\n", status, result );
 
+    status = ZQueueDestroy( &queue );
+    printf("got status %d\n", status );
+    status = ZQueueDestroy( &queue );
+    printf("got status %d\n", status );
     return 0;
 }

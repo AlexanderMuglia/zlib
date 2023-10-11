@@ -5,6 +5,11 @@
 
 #include "../../../../common/ZStatus.h"
 
+/*
+ * Performs a linear search of an array of strings.
+ * Sets Index to -1 if not found, otherwise sets Index to the
+ * first occurance of Item
+ */
 ZSTATUS
 ZLinearSearch
 (
@@ -14,6 +19,11 @@ ZLinearSearch
     int*        Index
 );
 
+/*
+ * Performs a binary search of an array of ints.
+ * Sets Index to -1 if not found, otherwise sets Index to the
+ * first found occurance of Item
+ */
 ZSTATUS
 ZBinarySearch
 (

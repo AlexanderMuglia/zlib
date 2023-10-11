@@ -25,6 +25,15 @@ ZStackInitialize
 );
 
 /*
+ * Destroys the stack
+ */
+ZSTATUS
+ZStackDestroy
+(
+    ZStack**     Stack
+);
+
+/*
  * Checks if the stack is empty.
  */
 ZSTATUS

@@ -5,7 +5,7 @@
 #include "../../../../common/ZStatus.h"
 
 /*
- * A node of a binary tree that stores a string as data
+ * A node of a binary tree that stores a string as data.
  */
 typedef struct ZBinaryTreeNode
 {
@@ -16,7 +16,7 @@ typedef struct ZBinaryTreeNode
 } ZBinaryTreeNode;
 
 /*
- * A binary tree type that holds a pointer to the root node
+ * A binary tree type that holds a pointer to the root node.
  */
 typedef struct
 {

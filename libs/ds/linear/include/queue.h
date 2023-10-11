@@ -27,6 +27,15 @@ ZQueueInitialize
 );
 
 /*
+ * Frees the queue
+ */
+ZSTATUS
+ZQueueDestroy
+(
+    ZQueue**     Queue
+);
+
+/*
  * Returns the size of the queue Size.
  */
 ZSTATUS

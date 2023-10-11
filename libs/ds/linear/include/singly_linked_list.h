@@ -76,3 +76,21 @@ ZSinglyLinkedListSearch
     char*                   Item,
     int*                    Index
 );
+
+/*
+ * Initialized a singly linked list
+ */
+ZSTATUS
+ZSinglyLinkedListInitialize
+(
+    ZSinglyLinkedList**      List
+);
+
+/*
+ * Frees a singly linked list
+ */
+ZSTATUS
+ZSinglyLinkedListDestroy
+(
+    ZSinglyLinkedList**      List
+);
