@@ -17,6 +17,9 @@
 // header size
 #define SIZE_T_SIZE         (ALIGN(sizeof(size_t)))
 
+// min block size will be SIZE_T_SIZE
+#define MIN_BLOCK_SIZE      SIZE_T_SIZE
+
 // start of the heap at initialization time
 #define HEAP_START          g_heap_start
 
@@ -24,6 +27,10 @@
 // Initializes the ZMalloc lib. Currently only needed to find the start of the heap.
 //
 // Must be called before using the library.
+//
+// Once we initialize, we are very restricted. Nothing that allocates memory can be used
+// other than ZMalloc or ZRealloc. This even includes things like printf, so we include a
+// printf in initialization.
 static ZSTATUS ZMallocInitialize();
 
 // Tries to find available memory in the heap that was used but is now freed.
@@ -35,6 +42,8 @@ static ZSTATUS ZFindFit( size_t size, void** ptr );
 // of a memory block.
 //
 // This memory is off-limits to the DMA until released by the user.
+//
+// if size = 0, we should still get a pointer
 ZSTATUS ZMalloc( size_t size, void** ret );
 
 // Indicates to the DMA that the payload pointed to by ptr can be reused.

@@ -17,6 +17,13 @@ ZMallocInitialize()
     if( !is_initialized )
     {
         is_initialized = 1;
+
+        // This print statement is more important than just alerting the user to
+        // the lib being initialized. More importantly, it ensures printf has
+        // been called (with a non-zero length string), which allocates the FILE*
+        // for the printf buffer. This has to be called before we set our heap start
+        // to allow more printf-ing without allocating memory outside of the lib.
+        printf("ZMalloc Initialized!\n");
         g_heap_start = sbrk(0);
 
         status = ZSTATUS_OK;
@@ -65,12 +72,32 @@ ZMalloc( size_t size, void** ret )
     size_t*     header      = NULL;
 
     blk_size = ALIGN( size + SIZE_T_SIZE );
-    header   = sbrk( blk_size );
 
-    // mark allocated bit
-    *header = blk_size | 1;
+    status = ZFindFit( blk_size, (void**)&header );
 
-    *ret = (char*)header + SIZE_T_SIZE; status = ZSTATUS_OK;
+    if( ZSTATUS_OK == status && header )
+    {
+        if( blk_size < *header )
+        {
+            // cut down block and use only what we need
+            // need to check for min block size
+            *(size_t*)((char*)header + blk_size) = *header - blk_size;
+
+        }
+        else
+        {
+            // use full block
+            *header = *header | 1;
+        }
+    }
+    else
+    {
+        header  = sbrk( blk_size );
+        *header = blk_size | 1;
+        status = ZSTATUS_OK;
+    }
+
+    *ret = (char*)header + SIZE_T_SIZE;
 
     return status;
 }
@@ -114,7 +141,6 @@ int main()
 
     if( ZSTATUS_OK == status )
     {
-        printf( "%p\n", HEAP_START );
         status = ZMalloc( 64 * sizeof(char), (void**)&myptr );
         myptr = (char*)myptr;
 
