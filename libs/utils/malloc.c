@@ -6,7 +6,13 @@ static pthread_mutex_t      init_mutex          = PTHREAD_MUTEX_INITIALIZER;
 static void*                g_heap_start        = 0;
 
 
-static
+// Initializes the ZMalloc lib. Currently only needed to find the start of the heap.
+//
+// Must be called before using the library.
+//
+// Once we initialize, we are very restricted. Nothing that allocates memory can be used
+// other than ZMalloc or ZRealloc. This even includes things like printf, so we include a
+// printf in initialization.
 ZSTATUS
 ZMallocInitialize()
 {
@@ -39,6 +45,9 @@ ZMallocInitialize()
 
 }
 
+// Tries to find available memory in the heap that was used but is now freed.
+//
+// Returns NULL if it there are no gaps of sufficient size.
 static
 ZSTATUS
 ZFindFit( size_t size, void** ptr )
@@ -126,33 +135,8 @@ ZFree( void *ptr )
     return status;
 }
 
-ZSTATUS
-ZRealloc( void *ptr, size_t size, void** ret )
-{
-    return ZSTATUS_FAILED;
-}
-
-int main()
-{
-    ZSTATUS     status  = ZSTATUS_OK;
-    char*       myptr   = NULL;
-
-    status = ZMallocInitialize();
-
-    if( ZSTATUS_OK == status )
-    {
-        status = ZMalloc( 64 * sizeof(char), (void**)&myptr );
-        myptr = (char*)myptr;
-
-        if( ZSTATUS_OK == status )
-        {
-            myptr[0] = 'H';
-            myptr[1] = 'I';
-            myptr[2] = '\0';
-            printf( "%s\n", myptr );
-            status = ZFree( myptr );
-        }
-
-        printf( "Free worked? %x\n", status );
-    }
-}
+//ZSTATUS
+//ZRealloc( void *ptr, size_t size, void** ret )
+//{
+//    return ZSTATUS_FAILED;
+//}

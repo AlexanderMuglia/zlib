@@ -124,6 +124,7 @@ ZSinglyLinkedListPrint
     {
         status = ZSTATUS_INVALID_ARGS;
     }
+    return status;
 }
 
 
@@ -137,7 +138,6 @@ ZSinglyLinkedListRemoveAtIndex
     ZSTATUS                                 status          =  ZSTATUS_FAILED;
     ZSinglyLinkedListNode*                  prev            =  NULL;
     ZSinglyLinkedListNode*                  current         =  NULL;
-    int                                     i               =  0;
 
     if( List )
     {
@@ -161,7 +161,7 @@ ZSinglyLinkedListRemoveAtIndex
             {
                 current = prev->next;
 
-                for( i = 1; i < Index; i++ );
+                for( uint32_t i = 1; i < Index; i++ )
                 {
                     prev = current;
                     current = current->next;
@@ -267,7 +267,7 @@ ZSinglyLinkedListSearch
 )
 {
     ZSTATUS                 status     =  ZSTATUS_FAILED;
-    int                     i          =  0;
+    uint64_t                i          =  0;
     int                     found      =  0;
     ZSinglyLinkedListNode*  cur        =  NULL;
 
@@ -290,7 +290,7 @@ ZSinglyLinkedListSearch
             }
             if( found )
             {
-                *Index = i;
+                *Index = (int)i;
             }
             else
             {

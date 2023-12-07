@@ -51,7 +51,7 @@ ZDynamicArrayInsert
 (
     ZDynamicArray*      Array,
     char*               Input,
-    int                 Index
+    uint64_t            Index
 );
 
 /*

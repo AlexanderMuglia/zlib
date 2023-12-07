@@ -123,7 +123,7 @@ ZDynamicArrayInsert
 (
     ZDynamicArray*      Array,
     char*               Input,
-    int                 Index
+    uint64_t            Index
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
@@ -155,9 +155,8 @@ ZDynamicArrayDestroy
 )
 {
     ZSTATUS         status      =   ZSTATUS_FAILED;
-    int             i           =   0;
 
-    for( i = 0; i < Array->size; i++ )
+    for( uint64_t i = 0; i < Array->size; i++ )
     {
         Array->array[i] = NULL;
     }
@@ -168,28 +167,4 @@ ZDynamicArrayDestroy
     status = ZSTATUS_OK;
 
     return status;
-}
-
-int main(int argc, char** argv)
-{
-    ZSTATUS                     status  =   0;
-    ZDynamicArray*              array   =   NULL;
-    char*                       res     =   "";
-    char*                       str1    =   "str1";
-    char*                       str2    =   "str2";
-
-    status = ZDynamicArrayInitialize( &array, 0);
-    status = ZDynamicArrayPush( array, str1 );
-    printf("%s\t%ld\t%d\n", array->array[0], array->size, status );
-    status = ZDynamicArrayPush( array, str2 );
-    printf("%s\t%ld\t%d\n", array->array[1], array->size, status );
-    status = ZDynamicArrayInsert( array, "my new string!", 0 );
-    for( int i = 0; i < 5; i++ )
-    {
-        res = "";
-        status = ZDynamicArrayPop( array, &res );
-        printf("%s\t%ld\t%ld\t%d\n", res, array->size, array->used, status );
-    }
-    status = ZDynamicArrayDestroy( array );
-    return 0;
 }

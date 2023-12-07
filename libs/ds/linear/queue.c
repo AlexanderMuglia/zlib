@@ -213,39 +213,3 @@ ZDequeue
 
     return status;
 }
-
-int main(int argc, char** argv)
-{
-    ZSTATUS                     status  =   0;
-    ZQueue*                     queue   =   NULL;
-    char*                       result  =   NULL;
-
-    status = ZQueueInitialize( &queue );
-    if( ZSTATUS_OK == status )
-    {
-        status = ZEnqueue( queue, "bye" );
-        status = ZEnqueue( queue, "bye1" );
-        status = ZEnqueue( queue, "bye2" );
-        status = ZEnqueue( queue, "bye3" );
-        status = ZEnqueue( queue, "bye4" );
-    }
-
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZDequeue( queue, &result );
-    printf("got status %d, %s\n", status, result );
-
-    status = ZQueueDestroy( &queue );
-    printf("got status %d\n", status );
-    status = ZQueueDestroy( &queue );
-    printf("got status %d\n", status );
-    return 0;
-}

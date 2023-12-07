@@ -23,7 +23,6 @@
 // start of the heap at initialization time
 #define HEAP_START          g_heap_start
 
-
 // Initializes the ZMalloc lib. Currently only needed to find the start of the heap.
 //
 // Must be called before using the library.
@@ -31,12 +30,7 @@
 // Once we initialize, we are very restricted. Nothing that allocates memory can be used
 // other than ZMalloc or ZRealloc. This even includes things like printf, so we include a
 // printf in initialization.
-static ZSTATUS ZMallocInitialize();
-
-// Tries to find available memory in the heap that was used but is now freed.
-//
-// Returns NULL if it there are no gaps of sufficient size.
-static ZSTATUS ZFindFit( size_t size, void** ptr );
+ZSTATUS ZMallocInitialize();
 
 // Returns a pointer to the payload (of minimum length size bytes)
 // of a memory block.
@@ -55,6 +49,6 @@ ZSTATUS ZFree( void* ptr );
 //
 // DMA may create a new block in which case old data is copied to
 // new region and old region is freed.
-ZSTATUS ZRealloc( void* ptr, size_t size, void** ret );
+// ZSTATUS ZRealloc( void* ptr, size_t size, void** ret );
 
 #endif

@@ -212,39 +212,3 @@ ZStackPop
 
     return status;
 }
-
-int main(int argc, char** argv)
-{
-    ZSTATUS                     status  =   0;
-    ZStack*                     stack   =   NULL;
-    char*                       result  =   NULL;
-
-    status = ZStackInitialize( &stack );
-    if( ZSTATUS_OK == status )
-    {
-        status = ZStackPush( stack, "bye" );
-        status = ZStackPush( stack, "bye1" );
-        status = ZStackPush( stack, "bye2" );
-        status = ZStackPush( stack, "bye3" );
-        status = ZStackPush( stack, "bye4" );
-    }
-
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-    status = ZStackPop( stack, &result );
-    printf("got status %d, %s\n", status, result );
-
-    status = ZStackDestroy( &stack );
-    printf("got status %d\n", status );
-    status = ZStackDestroy( &stack );
-    printf("got status %d\n", status );
-    return 0;
-}

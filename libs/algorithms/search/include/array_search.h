@@ -1,7 +1,10 @@
+#ifndef ARRAY_SEARCH_H
+#define ARRAY_SEARCH_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "../../../../common/ZStatus.h"
 
@@ -50,3 +53,4 @@ ZTwoCrystalBalls
     int         ArrayLen,
     int*        Index
 );
+#endif
